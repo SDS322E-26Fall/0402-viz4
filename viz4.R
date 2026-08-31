@@ -4,6 +4,34 @@ library(ggthemes)
 library(gapminder)
 
 #################################################################
+# the package socviz is associated with the textbook
+# Data Visualization A practical introduction by Kieran Healy
+socviz::gss_sm
+
+# basic bar chart
+ggplot(data = gss_sm, mapping = aes(x = bigregion)) +
+  geom_bar()
+
+# Your time (1/2)
+# There is also a geometry called geom_col() that does something similar.
+# Read the example in the documentation with ?geom_col() and create the plot above using geom_col().
+
+#################################################################
+gss_sm |>
+  ggplot(aes(x = bigregion, fill = religion)) +
+  geom_bar()
+
+# different position layouts
+gss_sm |>
+  ggplot(aes(x = bigregion, fill = religion)) +
+  geom_bar(position = "fill")
+
+gss_sm |>
+  ggplot(aes(x = bigregion, fill = religion)) +
+  geom_bar(position = "dodge")
+
+
+#################################################################
 # data.frame vs. tibble
 mtcars
 as_tibble(mtcars)
@@ -31,14 +59,6 @@ as.factor(my_fct2)
 mtcars2 <- mtcars |>
   mutate(cyl = as.factor(cyl))
 
-ggplot(mtcars2,
-       aes(x = mpg, y = disp, color = cyl)) +
-  geom_point(size = 5)
-
-# equivalence
-ggplot(mtcars, aes(x = mpg, y = disp)) +
-  geom_point(aes(color = as.factor(cyl)), size = 5)
-
 # change the legend title
 ggplot(mtcars, aes(x = mpg, y = disp)) +
   geom_point(aes(color = as.factor(cyl)), size = 5) +
@@ -47,8 +67,7 @@ ggplot(mtcars, aes(x = mpg, y = disp)) +
 # equivalence
 ggplot(mtcars, aes(x = mpg, y = disp)) +
   geom_point(aes(color = as.factor(cyl)), size = 5) +
-  scale_color_brewer(palette = "Dark2",
-                     name = "cylinder")
+  scale_color_brewer(palette = "Dark2", name = "cylinder")
 
 #################################################################
 # reorder factor levels
@@ -66,50 +85,23 @@ mtcars_tbl2 |>
   scale_fill_brewer(palette = "Dark2")
 
 #################################################################
-# Your time
-# reproduce the plot - see the slides for hints
+# Your time (2/2)
+# Start from this code, how would you change it into the plot on the right? 
+
+mtcars |>
+  rownames_to_column(var = "model") |> 
+  ggplot(aes(x = disp, y = model, fill = cyl)) + 
+  geom_col()
 
 
 
 
-#################################################################
-# change color palettes
-ggplot(mtcars, aes(x = mpg, y = disp)) +
-  geom_point(aes(color = as.factor(cyl)), size = 5) +
-  scale_color_brewer(palette = "Dark2",
-                     name = "cylinder")
-
-# try other palettes
-ggplot(mtcars, aes(x = mpg, y = disp)) +
-  geom_point(aes(color = as.factor(cyl)), size = 5) +
-  ggthemes::scale_color_colorblind(
-    name = "cylinder"
-  )
 
 
 #################################################################
-# patchwork for combining multiple plots
-p1 <- ggplot(mtcars) +
-  geom_point(aes(mpg, disp)) +
-  ggtitle('Plot 1')
-
-p2 <- ggplot(mtcars) +
-  geom_boxplot(aes(gear, disp, group = gear)) +
-  ggtitle('Plot 2')
-
-p1 / p2
-
-
-p1 + p2 +
-  plot_layout(guides = "collect")
-
-p1 + p2 +
-  plot_layout(guides = "collect") &
-  theme(legend.position = "bottom")
-
-#################################################################
-# Your time
-# reproduce the plot - see the slides for hints
+# Your time (bonus)
+# Take the `gapminder` data and focus on all the European countries. 
+# Plot the `lifeExp` for each country and order the country by their max `lifExp`.
 
 
 
